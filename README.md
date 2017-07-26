@@ -4,8 +4,8 @@ Pre-requisite
 
 -scikit-learn
 -7-zip
-
-
+-TensorFlow
+-python 3 64 bits (for big datasets)
 
 Step to set up the project
 
