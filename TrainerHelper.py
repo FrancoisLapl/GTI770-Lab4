@@ -3,6 +3,7 @@ import math
 import time
 import errno
 import os
+from PreprocessData import getStringFromValue 
 from pathlib import Path
 
 def getIndexOfOneHot(oneHotVector):
@@ -10,19 +11,19 @@ def getIndexOfOneHot(oneHotVector):
 		if oneHotVector[i] == 1.0:
 			return i
 
-def writeValidationResultToFile(fileName, predictedValue, actualValue, hasExpectedValue):
+def writeValidationResultToFile(fileName, predictedValue, actualValue, hasExpectedValue, labelsDict):
 
 	with open(fileName,'w') as file:
 		if hasExpectedValue:
 
 			for i in range(0, len(predictedValue)):
-				predicted = str(predictedValue[i])
-				expected = str(getIndexOfOneHot(actualValue[i]))
+				predicted = getStringFromValue(predictedValue[i], labelsDict)
+				expected = getStringFromValue(getIndexOfOneHot(actualValue[i]), labelsDict)
 				line = predicted + ", " + expected + "\n"
 				file.write(line)
 		else:
 			for i in range(0, len(predictedValue)):
-				predicted = str(predictedValue[i]) + "\n"
+				predicted = getStringFromValue(predictedValue[i], labelsDict) + "\n"
 				file.write(predicted)
 
 

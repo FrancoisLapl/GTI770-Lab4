@@ -3,6 +3,7 @@ import errno
 import os
 import gc
 import numpy as np
+import pickle
 
 from sys import getsizeof
 from pathlib import Path
@@ -83,8 +84,15 @@ def getStringFromOneHotVector(oneHotVector, dict):
 
     return "NO_LABEL_FOUND"
 
+def getStringFromValue(value, dict):
+    for Label, value in dict.items():
+        if value == i:
+            return Label
+
+    return "NO_LABEL_FOUND"
+
 def shuffleDataset(inputs, labels):
-    rng_state = numpy.random.get_state()
+    rng_state = np.random.get_state()
     if inputs != None:
         np.random.shuffle(a)
     np.random.set_state(rng_state)
@@ -117,13 +125,15 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
 
         if isValidation == True:
             PreComputedInputs = np.load("ValidationInputs.dat")
+            LabelsDict = pickle.load( open( "ValidationLabelsDict.p", "rb" ) )
             print("Precomputed file loaded")
-            return PreComputedInputs, None
+            return PreComputedInputs, None, LabelsDict
         else:
             PreComputedInputs = np.load("TrainInputs.dat")
             PreComputedLabels = np.load("TrainLabels.dat")
+            LabelsDict = pickle.load( open( "TrainLabelsDict.p", "rb" ) )
             print("Precomputed files loaded")
-            return PreComputedInputs, PreComputedLabels
+            return PreComputedInputs, PreComputedLabels, LabelsDict
        
     except Exception as e:
         print("No precomputed files found continuing normal operations")
@@ -181,15 +191,17 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
     print(getStringFromOneHotVector(labels[inputQty-2],labelsStringsDict))
     print(getStringFromOneHotVector(labels[inputQty-1],labelsStringsDict))
     #print(inputs[np.size(inputs,0)])
-    input("press to continue")
+    #input("press to continue")
 
     try:
 
         if isValidation == True:
-            PreComputedInputs = inputs.dump("ValidationInputs.dat")
+            inputs.dump("ValidationInputs.dat")
+            pickle.dump( labelsStringsDict, open( "ValidationLabelsDict.p", "wb" ) )
         else:
-            PreComputedInputs = inputs.dump("TrainInputs.dat")
-            PreComputedLabels = labels.dump("TrainLabels.dat")
+            inputs.dump("TrainInputs.dat")
+            labels.dump("TrainLabels.dat")
+            pickle.dump( labelsStringsDict, open( "TrainLabelsDict.p", "wb" ) )
        
     except Exception as e:
         print("Failed to save the datasets to the disk")
@@ -201,6 +213,6 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
     print(labels[inputQty-2])
     print(labels[inputQty-1])
     
-    return inputs, labels
+    return inputs, labels, labelsStringsDict
 
 #loadDataset("resultFile.arff", False, True)

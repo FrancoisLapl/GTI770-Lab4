@@ -3,7 +3,7 @@ import numpy as np
 from PreprocessData import loadDataset
 from TrainerHelper import splitDataset, getNextBatch, writeValidationResultToFile, getIndexOfOneHot
 
-inputs, labels = loadDataset("resultFile.arff", False, True)
+inputs, labels, labelsDict = loadDataset("resultFile.arff", False, False)
 
 n_nodes_hl1 = 500
 n_nodes_hl2 = 500
@@ -121,7 +121,7 @@ def train_neural_network(x):
         feed_dict = {x: validation_Inputs, y: validation_Labels}
 
         predictionResult = sess.run(predictedValue, feed_dict=feed_dict)
-        writeValidationResultToFile("Ai1_prediction.txt", predictionResult, validation_Labels, True)
+        writeValidationResultToFile("Ai1_prediction.txt", predictionResult, validation_Labels, True, labelsDict)
 
         ##correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
         ##print(correct)
