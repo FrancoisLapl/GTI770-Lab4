@@ -19,7 +19,7 @@ from pathlib import Path
 # return one large data matrix containing all the fusionned lines
 #list of files ["msd-jmirderivatives_dev.arff","msd-jmirlpc_dev.arff", "msd-jmirmfccs_dev.arff", "msd-jmirmoments_dev.arff", "msd-jmirspectral_dev.arff", "msd-marsyas_dev_new.arff", "msd-mvd_dev.arff", "msd-rh_dev_new.arff", "msd-ssd_dev.arff", "msd-trh_dev.arff"]
 
-def loadDataset(FileNames, UsedColumns, usePrebakedModule = False):
+def loadDataset(OutputFileName, FileNames, UsedColumns, usePrebakedModule = False):
     DATA_FOLDER_NAME = "Data" + os.sep
      
     # Check if file names are existing
@@ -73,5 +73,5 @@ def loadDataset(FileNames, UsedColumns, usePrebakedModule = False):
     input("press to continue")
     return dataset
     
-loadDataset(["msd-jmirderivatives_dev.arff","msd-jmirlpc_dev.arff", "msd-jmirmfccs_dev.arff", "msd-jmirmoments_dev.arff", "msd-jmirspectral_dev.arff", "msd-marsyas_dev_new.arff", "msd-mvd_dev.arff", "msd-rh_dev_new.arff", "msd-ssd_dev.arff", "msd-trh_dev.arff"]
+loadDataset("Dataset1",["msd-jmirderivatives_dev.arff","msd-jmirlpc_dev.arff", "msd-jmirmfccs_dev.arff", "msd-jmirmoments_dev.arff", "msd-jmirspectral_dev.arff", "msd-marsyas_dev_new.arff", "msd-mvd_dev.arff", "msd-rh_dev_new.arff", "msd-ssd_dev.arff", "msd-trh_dev.arff"]
              ,[range(5, 90),                range(5,15),            range(5,20),               range(5,11),                range(2,17),                 range(2,126),                range(2,420),        range(2,60),           range(2,168),        range(2,420)])
