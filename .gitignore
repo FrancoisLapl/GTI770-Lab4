@@ -1,0 +1,7 @@
+*.dat
+*.arff
+
+DEVNEW/
+MNIST_data/
+NOLABELNEW/
+
