@@ -74,6 +74,24 @@ def loadDifferentDataset(OutputFileName, FileNames, UsedColumns):
     input("press to continue")
     return dataset
 
+def getStringFromOneHotVector(oneHotVector, dict):
+    for i in range(0,len(oneHotVector)):
+        if oneHotVector[i] == 1.0:
+            for Label, value in dict.items():
+                if value == i:
+                    return Label
+
+    return "NO_LABEL_FOUND"
+
+def shuffleDataset(inputs, labels):
+    rng_state = numpy.random.get_state()
+    if inputs != None:
+        np.random.shuffle(a)
+    np.random.set_state(rng_state)
+
+    if labels != None:
+        np.random.shuffle(b)
+
 def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataIndex, labelsDictionnary, attributeQty):
     splittedLine = rawLine.split(',')
   
@@ -86,14 +104,29 @@ def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataInde
     labelVectorMatrix[dataIndex, labelIndex] = 1.0 ## initialise in oneHot format [0, 0, 0, 1, 0, 0,]
 
 
-def loadDataset(fileName, PleaseLoadLabels):
+def loadDataset(fileName, isValidation, pleaseShuffle):
      
     if Path(fileName).exists() == False:
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), fileName)
     
-    inputQty = 179555 + 1 # hard coded for simplicity
-    attributeQty = 1360   
+    inputQty = 179060 # hard coded for simplicity
+    attributeQty = 1   
     outputClassesQty = 0
+
+    try:
+
+        if isValidation == True:
+            PreComputedInputs = np.load("ValidationInputs.dat")
+            print("Precomputed file loaded")
+            return PreComputedInputs, None
+        else:
+            PreComputedInputs = np.load("TrainInputs.dat")
+            PreComputedLabels = np.load("TrainLabels.dat")
+            print("Precomputed files loaded")
+            return PreComputedInputs, PreComputedLabels
+       
+    except Exception as e:
+        print("No precomputed files found continuing normal operations")
 
     inputs = np.zeros(shape=(1, 1), dtype=np.float32)
     labels = np.zeros(shape=(1, 1), dtype=np.float32)
@@ -110,7 +143,7 @@ def loadDataset(fileName, PleaseLoadLabels):
 
         for line in file:
             if not headerSkipped and line.startswith("@attribute class"):
-                # Creating the label dicionnary
+                # Creating the label dicionnary by getting the labels inside the brackets {ROCK,PUNK}
                 labels = line.split('{')[1].split('}')[0].split(',')
                 outputClassesQty = len(labels)
                 labelsValues = [x for x in range(0,outputClassesQty)]
@@ -136,15 +169,38 @@ def loadDataset(fileName, PleaseLoadLabels):
                     
             elif "@data" in line:
                 headerSkipped = True
+        print("nunmber of lines read", lineIndex + 1)
 
     elapsedTime = time.process_time() - startTime
     print("number of input lines:", np.size(inputs,0), "number of attributes:", np.size(inputs,1))
     print("Loading dataset Done.")
     print("The process tooked: " + str(elapsedTime) + " seconds")
-    print(inputs[np.size(inputs,0)]-1)
+    print(inputs[inputQty-2])
+    print(inputs[inputQty-1])
+
+    print(getStringFromOneHotVector(labels[inputQty-2],labelsStringsDict))
+    print(getStringFromOneHotVector(labels[inputQty-1],labelsStringsDict))
     #print(inputs[np.size(inputs,0)])
     input("press to continue")
 
+    try:
+
+        if isValidation == True:
+            PreComputedInputs = inputs.dump("ValidationInputs.dat")
+        else:
+            PreComputedInputs = inputs.dump("TrainInputs.dat")
+            PreComputedLabels = labels.dump("TrainLabels.dat")
+       
+    except Exception as e:
+        print("Failed to save the datasets to the disk")
+
+    if pleaseShuffle:
+        print("Every day im shuffling")
+        shuffleDataset(inputs, labels)
+    
+    print(labels[inputQty-2])
+    print(labels[inputQty-1])
+    
     return inputs, labels
 
-loadDataset("resultFile.arff", True)
+loadDataset("resultFile.arff", False, True)
