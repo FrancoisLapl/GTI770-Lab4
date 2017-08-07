@@ -203,4 +203,4 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
     
     return inputs, labels
 
-loadDataset("resultFile.arff", False, True)
+#loadDataset("resultFile.arff", False, True)

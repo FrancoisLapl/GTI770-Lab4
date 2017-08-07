@@ -1,6 +1,8 @@
 import tensorflow as tf
-from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("/tmp/data/", one_hot = True)
+import numpy as np
+from PreprocessData import loadDataset
+
+inputs, labels = loadDataset("resultFile.arff", False, True)
 
 n_nodes_hl1 = 500
 n_nodes_hl2 = 500
@@ -13,14 +15,19 @@ n_nodes_hl8 = 500
 n_nodes_hl9 = 500
 n_nodes_hl10 = 500
 
-n_classes = 10
+n_attributes = len(inputs[1])
+n_classes = len(labels[0])
+
 batch_size = 100
 
-x = tf.placeholder('float', [None, 784])
+x = tf.placeholder('float', [None, n_attributes])
 y = tf.placeholder('float')
 
+def getNextBatch():
+    
+    
 def neural_network_model(data):
-    hidden_1_layer = {'weights':tf.Variable(tf.random_normal([784, n_nodes_hl1])),
+    hidden_1_layer = {'weights':tf.Variable(tf.random_normal([n_attributes, n_nodes_hl1])),
                       'biases':tf.Variable(tf.random_normal([n_nodes_hl1]))}
 
     hidden_2_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl1, n_nodes_hl2])),
@@ -99,7 +106,7 @@ def train_neural_network(x):
 
         for epoch in range(hm_epochs):
             epoch_loss = 0
-            for _ in range(int(mnist.train.num_examples/batch_size)):
+            for _ in range(int(n_attributes/batch_size)):
                 epoch_x, epoch_y = mnist.train.next_batch(batch_size)
                 #print(epoch_x)
                 print(epoch_y)
