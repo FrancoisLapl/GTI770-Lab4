@@ -14,8 +14,6 @@ n_nodes_hl9 = 500
 n_nodes_hl10 = 500
 
 
-
-
 n_classes = 10
 batch_size = 100
 
@@ -57,8 +55,6 @@ def neural_network_model(data):
                     'biases':tf.Variable(tf.random_normal([n_classes])),}
 
 
-
-
     l1 = tf.add(tf.matmul(data,hidden_1_layer['weights']), hidden_1_layer['biases'])
     l1 = tf.nn.relu(l1)
 
@@ -98,7 +94,7 @@ def train_neural_network(x):
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
 
-    hm_epochs = 100
+    hm_epochs = 1
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -106,6 +102,8 @@ def train_neural_network(x):
             epoch_loss = 0
             for _ in range(int(mnist.train.num_examples/batch_size)):
                 epoch_x, epoch_y = mnist.train.next_batch(batch_size)
+                #print(epoch_x)
+                print(epoch_y)
                 _, c = sess.run([optimizer, cost], feed_dict={x: epoch_x, y: epoch_y})
                 epoch_loss += c
 
