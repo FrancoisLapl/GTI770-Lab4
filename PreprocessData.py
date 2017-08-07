@@ -85,8 +85,8 @@ def getStringFromOneHotVector(oneHotVector, dict):
     return "NO_LABEL_FOUND"
 
 def getStringFromValue(value, dict):
-    for Label, value in dict.items():
-        if value == i:
+    for Label, dictValue in dict.items():
+        if value == dictValue:
             return Label
 
     return "NO_LABEL_FOUND"
