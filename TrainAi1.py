@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from PreprocessData import loadDataset
+from TrainerHelper import splitDataset
 
 inputs, labels = loadDataset("resultFile.arff", False, True)
 
@@ -17,15 +18,18 @@ n_nodes_hl10 = 500
 
 n_attributes = len(inputs[1])
 n_classes = len(labels[0])
+n_data = len(inputs)
 
+splitDataset(inputs,labels, 0.1) 
+
+exit()
 batch_size = 100
 
 x = tf.placeholder('float', [None, n_attributes])
 y = tf.placeholder('float')
 
-def getNextBatch():
-    
-    
+
+
 def neural_network_model(data):
     hidden_1_layer = {'weights':tf.Variable(tf.random_normal([n_attributes, n_nodes_hl1])),
                       'biases':tf.Variable(tf.random_normal([n_nodes_hl1]))}
