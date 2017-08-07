@@ -1,5 +1,30 @@
 import numpy as np
 import math
+import time
+import errno
+import os
+from pathlib import Path
+
+def getIndexOfOneHot(oneHotVector):
+	for i in range(0, len(oneHotVector)):
+		if oneHotVector[i] == 1.0:
+			return i
+
+def writeValidationResultToFile(fileName, predictedValue, actualValue, hasExpectedValue):
+
+	with open(fileName,'w') as file:
+		if hasExpectedValue:
+
+			for i in range(0, len(predictedValue)):
+				predicted = str(predictedValue[i])
+				expected = str(getIndexOfOneHot(actualValue[i]))
+				line = predicted + ", " + expected + "\n"
+				file.write(line)
+		else:
+			for i in range(0, len(predictedValue)):
+				predicted = str(predictedValue[i]) + "\n"
+				file.write(predicted)
+
 
 def getNextBatch(inputs, labels, batchSize, currentBatchIndex):
 	assert(len(inputs) == len(labels))
