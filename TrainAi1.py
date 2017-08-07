@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from PreprocessData import loadDataset
-from TrainerHelper import splitDataset
+from TrainerHelper import splitDataset, getNextBatch
 
 inputs, labels = loadDataset("resultFile.arff", False, True)
 
@@ -18,17 +18,13 @@ n_nodes_hl10 = 500
 
 n_attributes = len(inputs[1])
 n_classes = len(labels[0])
-n_data = len(inputs)
 
-splitDataset(inputs,labels, 0.1) 
+train_Inputs, train_Labels, validation_Inputs, validation_Labels = splitDataset(inputs,labels, 0.9) 
 
-exit()
 batch_size = 100
 
 x = tf.placeholder('float', [None, n_attributes])
 y = tf.placeholder('float')
-
-
 
 def neural_network_model(data):
     hidden_1_layer = {'weights':tf.Variable(tf.random_normal([n_attributes, n_nodes_hl1])),
@@ -104,24 +100,25 @@ def train_neural_network(x):
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
 
-    hm_epochs = 1
+    hm_epochs = 400
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
         for epoch in range(hm_epochs):
             epoch_loss = 0
-            for _ in range(int(n_attributes/batch_size)):
-                epoch_x, epoch_y = mnist.train.next_batch(batch_size)
+            for i in range(int(len(train_Inputs)/batch_size)):
+                epoch_x, epoch_y = getNextBatch(train_Inputs, train_Labels, batch_size, i)
+                #print(i)
                 #print(epoch_x)
-                print(epoch_y)
-                _, c = sess.run([optimizer, cost], feed_dict={x: epoch_x, y: epoch_y})
+                #print(epoch_y)
+                i, c = sess.run([optimizer, cost], feed_dict={x: epoch_x, y: epoch_y})
                 epoch_loss += c
 
-            print('Epoch', epoch, 'completed out of',hm_epochs,'loss:',epoch_loss)
+            print('Epoch', epoch, 'completed out of',hm_epochs,'loss:', epoch_loss)
 
         correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
 
         accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
-        print('Accuracy:',accuracy.eval({x:mnist.test.images, y:mnist.test.labels}))
+        print('Accuracy:',accuracy.eval({x:validation_Inputs, y:validation_Labels}))
 
 train_neural_network(x)

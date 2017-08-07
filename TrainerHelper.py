@@ -1,8 +1,16 @@
 import numpy as np
 import math
 
-def getNextBatch(inputs, labels, batchSize, currentBatch):
-	return
+def getNextBatch(inputs, labels, batchSize, currentBatchIndex):
+	assert(len(inputs) == len(labels))
+	
+	thisBatchStartIndex = currentBatchIndex *  batchSize
+	thisBatchStartEndIndex = thisBatchStartIndex + batchSize
+
+	thisBatchInputs = inputs[thisBatchStartIndex:thisBatchStartEndIndex]
+	thisBatchLabels = labels[thisBatchStartIndex:thisBatchStartEndIndex]
+
+	return thisBatchInputs, thisBatchLabels
 
 def splitDataset(inputs, labels, trainingPercentage):
 	
@@ -20,9 +28,9 @@ def splitDataset(inputs, labels, trainingPercentage):
 	trainInputs = inputs[0:n_Train]
 	trainLabels = labels[0:n_Train]
 
-	validationInputs = inputs[n_Train+1:len(inputs)]
-	validationLabels = labels[n_Train+1:len(inputs)]
-	
+	validationInputs = inputs[n_Train:len(inputs)]
+	validationLabels = labels[n_Train:len(inputs)]
+
 	print("trainInputs",  len(trainInputs), "trainLabels",  len(trainLabels))
 	print("validationInputs",  len(validationInputs), "validationLabels",  len(validationLabels))
 	print("Total inputs", len(trainInputs) + len(validationInputs), "Total labels", len(trainLabels)+len(validationLabels))
