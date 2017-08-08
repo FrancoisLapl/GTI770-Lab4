@@ -111,7 +111,6 @@ def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataInde
     labelIndex = labelsDictionnary[splittedLine[len(splittedLine)-1].rstrip()] #dont forget to do rstrip to remove the backslash n at the end of the label 
     labelVectorMatrix[dataIndex, labelIndex] = 1.0 ## initialise in oneHot format [0, 0, 0, 1, 0, 0,]
 
-
 def loadDataset(fileName, isValidation, pleaseShuffle):
      
     if Path(fileName).exists() == False:
@@ -127,12 +126,14 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
             PreComputedInputs = np.load("ValidationInputs.dat")
             LabelsDict = pickle.load( open( "ValidationLabelsDict.p", "rb" ) )
             print("Precomputed file loaded")
+            print(LabelsDict)
             return PreComputedInputs, None, LabelsDict
         else:
             PreComputedInputs = np.load("TrainInputs.dat")
             PreComputedLabels = np.load("TrainLabels.dat")
             LabelsDict = pickle.load( open( "TrainLabelsDict.p", "rb" ) )
             print("Precomputed files loaded")
+            print(LabelsDict)
             return PreComputedInputs, PreComputedLabels, LabelsDict
        
     except Exception as e:
