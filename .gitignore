@@ -5,3 +5,4 @@ DEVNEW/
 MNIST_data/
 NOLABELSNEW/
 
+__pycache__/
