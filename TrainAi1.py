@@ -1,5 +1,7 @@
 import tensorflow as tf
 import numpy as np
+import sys
+
 from PreprocessData import loadDataset
 from TrainerHelper import splitDataset, getNextBatch, writeValidationResultToFile, getIndexOfOneHot
 
