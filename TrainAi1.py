@@ -3,7 +3,9 @@ import numpy as np
 from PreprocessData import loadDataset
 from TrainerHelper import splitDataset, getNextBatch, writeValidationResultToFile, getIndexOfOneHot
 
-inputs, labels, labelsDict = loadDataset("resultFile.arff", False, False)
+arguments = ' '.join(sys.argv[1:])
+
+inputs, labels, labelsDict = loadDataset(arguments, False, False)
 
 n_nodes_hl1 = 500
 n_nodes_hl2 = 500

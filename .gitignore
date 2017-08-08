@@ -1,5 +1,6 @@
 *.dat
 *.arff
+*.p
 
 DEVNEW/
 MNIST_data/

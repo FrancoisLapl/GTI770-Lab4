@@ -100,7 +100,7 @@ def shuffleDataset(inputs, labels):
     if labels != None:
         np.random.shuffle(b)
 
-def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataIndex, labelsDictionnary, attributeQty):
+def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataIndex, labelsDictionnary, attributeQty, hasLabel):
     splittedLine = rawLine.split(',')
   
     offset = len(splittedLine) - attributeQty - 1
@@ -108,8 +108,9 @@ def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataInde
     for i in range(2, 2 + attributeQty):
         inputMatrix[dataIndex, i-offset] = float(splittedLine[i])
 
-    labelIndex = labelsDictionnary[splittedLine[len(splittedLine)-1].rstrip()] #dont forget to do rstrip to remove the backslash n at the end of the label 
-    labelVectorMatrix[dataIndex, labelIndex] = 1.0 ## initialise in oneHot format [0, 0, 0, 1, 0, 0,]
+    if hasLabel:
+        labelIndex = labelsDictionnary[splittedLine[len(splittedLine)-1].rstrip()] #dont forget to do rstrip to remove the backslash n at the end of the label 
+        labelVectorMatrix[dataIndex, labelIndex] = 1.0 ## initialise in oneHot format [0, 0, 0, 1, 0, 0,]
 
 def loadDataset(fileName, isValidation, pleaseShuffle):
      
@@ -117,6 +118,9 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), fileName)
     
     inputQty = 179060 # hard coded for simplicity
+    if isValidation: # Oh god why!
+        inputQty = 92500
+
     attributeQty = 1   
     outputClassesQty = 0
 
@@ -166,15 +170,16 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
             elif headerSkipped and lineIndex == 0:
                 splittedLine = line.split(',')
                 attributeQty = len(splittedLine) - 3 #we dont take the two first data cells and the label at the end 
+               
                 inputs = np.zeros(shape=(inputQty, attributeQty), dtype=np.float32)
                 labels = np.zeros(shape=(inputQty, outputClassesQty), dtype=np.float32)
                 
-                addStringDataLineToDataset(line, inputs, labels, lineIndex, labelsStringsDict, attributeQty)
+                addStringDataLineToDataset(line, inputs, labels, lineIndex, labelsStringsDict, attributeQty, not isValidation)
 
                 lineIndex += 1
                 
             elif headerSkipped:
-                addStringDataLineToDataset(line, inputs, labels, lineIndex,labelsStringsDict, attributeQty)
+                addStringDataLineToDataset(line, inputs, labels, lineIndex,labelsStringsDict, attributeQty, not isValidation)
 
                 lineIndex += 1
                     
@@ -193,7 +198,11 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
     print(getStringFromOneHotVector(labels[inputQty-1],labelsStringsDict))
     #print(inputs[np.size(inputs,0)])
     #input("press to continue")
-
+    
+    if pleaseShuffle:
+        print("Every day im shuffling")
+        shuffleDataset(inputs, labels)
+    
     try:
 
         if isValidation == True:
@@ -207,10 +216,6 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
     except Exception as e:
         print("Failed to save the datasets to the disk")
 
-    if pleaseShuffle:
-        print("Every day im shuffling")
-        shuffleDataset(inputs, labels)
-    
     print(labels[inputQty-2])
     print(labels[inputQty-1])
     
