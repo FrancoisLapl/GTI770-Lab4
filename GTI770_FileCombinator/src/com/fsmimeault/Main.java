@@ -8,25 +8,47 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        boolean trainingMode = args.length > 0 && args[0].contentEquals("train") ? true : false;
+        // Merge training files
+        System.out.println("Starting the merge of training files.....................................");
+        List<BufferedReader> bufferedReaderListTrain = new ArrayList<>();
+        LoadFiles(bufferedReaderListTrain, true);
 
-        List<BufferedReader> bufferedReaderList = new ArrayList<>();
+        FileOutputStream trainFileOutputStream = new FileOutputStream("train.arff");
+        BufferedWriter trainBufferedWriter = new BufferedWriter(new OutputStreamWriter(trainFileOutputStream));
 
-        LoadFiles(bufferedReaderList, trainingMode);
+        trainBufferedWriter.write("@relation Combined File of training music track primitives");
+        trainBufferedWriter.newLine();
+        trainBufferedWriter.newLine();
 
-        FileOutputStream fileOutputStream = new FileOutputStream("resultFile.arff");
-        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
-
-        bufferedWriter.write("@relation Combined File of music track primitives");
-        bufferedWriter.newLine();
-        bufferedWriter.newLine();
-
-        WriteAttributesToFile(bufferedReaderList, bufferedWriter);
-        WriteDataToFile(bufferedReaderList, bufferedWriter);
+        WriteAttributesToFile(bufferedReaderListTrain, trainBufferedWriter);
+        WriteDataToFile(bufferedReaderListTrain, trainBufferedWriter);
+        System.out.println("Finished the merge of training files.....................................");
 
         // Close all buffers
-        CloseBuffers(bufferedReaderList);
-        bufferedWriter.close();
+        System.out.println("Closing training buffers........................................");
+        CloseBuffers(bufferedReaderListTrain);
+        trainBufferedWriter.close();
+
+        // Merge validation files
+        System.out.println("Starting the merge of training files.....................................");
+        List<BufferedReader> bufferedReaderListValid = new ArrayList<>();
+        LoadFiles(bufferedReaderListValid, false);
+
+        FileOutputStream validFileOutputStream = new FileOutputStream("valid.arff");
+        BufferedWriter validBufferedWriter = new BufferedWriter(new OutputStreamWriter(validFileOutputStream));
+
+        validBufferedWriter.write("@relation Combined File of validation music track primitives");
+        validBufferedWriter.newLine();
+        validBufferedWriter.newLine();
+
+        WriteAttributesToFile(bufferedReaderListValid, validBufferedWriter);
+        WriteDataToFile(bufferedReaderListValid, validBufferedWriter);
+        System.out.println("Finished the merge of validation files.....................................");
+
+        // Close all buffers
+        System.out.println("Closing validation buffers........................................");
+        CloseBuffers(bufferedReaderListValid);
+        validBufferedWriter.close();
     }
 
     private static void LoadFiles(List<BufferedReader> bufferedReaderList, boolean train) throws FileNotFoundException {
@@ -61,6 +83,9 @@ public class Main {
         SkipLineAndPrint(bufferedReaderList, bufferedWriter, "@data");
 
         while (bufferedReaderList.iterator().next().ready()){
+
+            System.out.println("Hey, we're still working here! Processing the next item...");
+
             boolean firstFile = true;
             String sampleID = "";
             String trackID = "";
