@@ -201,7 +201,12 @@ def loadDataset(fileName, isValidation, pleaseShuffle = False):
     
     if pleaseShuffle:
         print("Every day im shuffling")
-        shuffleDataset(inputs, labels)
+        inputs, labels = shuffleDataset(inputs, labels)
+        for i in range(990,1000):
+            print("\n")
+            print(inputs[i])
+            print(labels[i])
+
     
     try:
 
