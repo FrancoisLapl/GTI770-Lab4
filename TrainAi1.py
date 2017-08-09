@@ -31,13 +31,11 @@ def train_neural_network(x):
         sess.run(tf.global_variables_initializer())
 
         for epoch in range(n_epochs):
-            epoch_loss = 0
             for i in range(int(len(train_Inputs)/batch_Qty)):
                 epoch_x, epoch_y = getNextBatch(train_Inputs, train_Labels, batch_Qty, i)
                 i, c = sess.run([opti, cost], feed_dict={x: epoch_x, y: epoch_y})
-                epoch_loss += c
 
-            print('Epoch', epoch, 'completed out of', n_epochs,'loss:', epoch_loss)
+            print('Epoch', epoch, 'completed out of', n_epochs)
         saver.save(sess, 'Ai1Save/Ai1Model.chkpt')
 
 train_neural_network(dataPlaceHolder)
