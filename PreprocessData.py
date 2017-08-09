@@ -92,13 +92,9 @@ def getStringFromValue(value, dict):
     return "NO_LABEL_FOUND"
 
 def shuffleDataset(inputs, labels):
-    rng_state = np.random.get_state()
-    if inputs != None:
-        np.random.shuffle(a)
-    np.random.set_state(rng_state)
-
-    if labels != None:
-        np.random.shuffle(b)
+    assert len(inputs) == len(labels)
+    permutation = np.random.permutation(len(inputs))
+    return inputs[permutation], labels[permutation]
 
 def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataIndex, labelsDictionnary, attributeQty, hasLabel):
     splittedLine = rawLine.split(',')
@@ -112,12 +108,13 @@ def addStringDataLineToDataset(rawLine, inputMatrix, labelVectorMatrix, dataInde
         labelIndex = labelsDictionnary[splittedLine[len(splittedLine)-1].rstrip()] #dont forget to do rstrip to remove the backslash n at the end of the label 
         labelVectorMatrix[dataIndex, labelIndex] = 1.0 ## initialise in oneHot format [0, 0, 0, 1, 0, 0,]
 
-def loadDataset(fileName, isValidation, pleaseShuffle):
+def loadDataset(fileName, isValidation, pleaseShuffle = False):
      
     if Path(fileName).exists() == False:
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), fileName)
     
     inputQty = 179060 # hard coded for simplicity
+
     if isValidation: # Oh god why!
         inputQty = 92500
 

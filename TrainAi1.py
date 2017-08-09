@@ -7,7 +7,7 @@ from TrainerHelper import splitDataset, getNextBatch, writeValidationResultToFil
 
 arguments = ' '.join(sys.argv[1:])
 
-inputs, labels, labelsDict = loadDataset(arguments, False, False)
+inputs, labels, labelsDict = loadDataset(arguments, False, True)
 
 n_attributes = len(inputs[1])
 n_classes = len(labels[0])
