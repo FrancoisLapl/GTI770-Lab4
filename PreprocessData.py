@@ -131,7 +131,9 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
             LabelsDict = pickle.load( open( "ValidationLabelsDict.p", "rb" ) )
             print("Precomputed file loaded")
             print(LabelsDict)
-            return PreComputedInputs, None, LabelsDict
+            zeroedLabels = np.zeros(shape=(inputQty, len(LabelsDict)), dtype=np.float32)
+
+            return PreComputedInputs, zeroedLabels, LabelsDict
         else:
             PreComputedInputs = np.load("TrainInputs.dat")
             PreComputedLabels = np.load("TrainLabels.dat")
@@ -141,10 +143,11 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
             return PreComputedInputs, PreComputedLabels, LabelsDict
        
     except Exception as e:
-        print("No precomputed files found continuing normal operations")
+        print(e)
 
     inputs = np.zeros(shape=(1, 1), dtype=np.float32)
     labels = np.zeros(shape=(1, 1), dtype=np.float32)
+
     labelsStringsDict = {}
 
     startTime = time.process_time()
@@ -219,6 +222,9 @@ def loadDataset(fileName, isValidation, pleaseShuffle):
     print(labels[inputQty-2])
     print(labels[inputQty-1])
     
+    if isValidation: # Oh god why!
+        labels = np.zeros(shape=(inputQty, len(labelsStringsDict)), dtype=np.float32)
+
     return inputs, labels, labelsStringsDict
 
 #loadDataset("resultFile.arff", False, True)

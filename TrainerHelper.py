@@ -65,7 +65,7 @@ def splitDataset(inputs, labels, trainingPercentage):
 
 	return trainInputs, trainLabels, validationInputs, validationLabels
 
-def neural_network_model(data, nbClass, nbattributes):
+def createNeuralNetwork(data, nbClass, nbattributes):
 	n_nodes_hl1 = 500
 	n_nodes_hl2 = 500
 	n_nodes_hl3 = 500
@@ -77,17 +77,17 @@ def neural_network_model(data, nbClass, nbattributes):
 	n_nodes_hl9 = 500
 	n_nodes_hl10 = 500
 
-	hidden_1_layer = {'weights':tf.Variable(tf.random_normal([nbattributes, n_nodes_hl1])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl1]))}
-	hidden_2_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl1, n_nodes_hl2])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl2]))}
-	hidden_3_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl2, n_nodes_hl3])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl3]))}
-	hidden_4_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl3, n_nodes_hl4])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl4]))}
-	hidden_5_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl4, n_nodes_hl5])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl5]))}
-	hidden_6_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl5, n_nodes_hl6])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl6]))}
-	hidden_7_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl6, n_nodes_hl7])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl7]))}
-	hidden_8_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl7, n_nodes_hl8])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl8]))}
-	hidden_9_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl8, n_nodes_hl9])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl9]))}
-	hidden_10_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl9, n_nodes_hl10])), 'biases':tf.Variable(tf.random_normal([n_nodes_hl10]))}
-	output_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl10, nbClass])), 'biases':tf.Variable(tf.random_normal([nbClass])),}
+	hidden_1_layer = {'weights':tf.Variable(tf.random_normal([nbattributes, n_nodes_hl1]), name="W0"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl1]), name="B0")}
+	hidden_2_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl1, n_nodes_hl2]), name="W1"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl2]), name="B1")}
+	hidden_3_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl2, n_nodes_hl3]), name="W2"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl3]), name="B2")}
+	hidden_4_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl3, n_nodes_hl4]), name="W3"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl4]), name="B3")}
+	hidden_5_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl4, n_nodes_hl5]), name="W4"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl5]), name="B4")}
+	hidden_6_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl5, n_nodes_hl6]), name="W5"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl6]), name="B5")}
+	hidden_7_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl6, n_nodes_hl7]), name="W6"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl7]), name="B6")}
+	hidden_8_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl7, n_nodes_hl8]), name="W7"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl8]), name="B7")}
+	hidden_9_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl8, n_nodes_hl9]), name="W8"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl9]), name="B8")}
+	hidden_10_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl9, n_nodes_hl10]), name="W9"), 'biases':tf.Variable(tf.random_normal([n_nodes_hl10]), name="B9")}
+	output_layer = {'weights':tf.Variable(tf.random_normal([n_nodes_hl10, nbClass]), name="10"), 'biases':tf.Variable(tf.random_normal([nbClass]), name="B10"),}
 
 	l1 = tf.add(tf.matmul(data,hidden_1_layer['weights']), hidden_1_layer['biases'])
 	l1 = tf.nn.relu(l1)

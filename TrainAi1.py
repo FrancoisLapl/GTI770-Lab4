@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 from PreprocessData import loadDataset
-from TrainerHelper import splitDataset, getNextBatch, writeValidationResultToFile, getIndexOfOneHot, neural_network_model
+from TrainerHelper import splitDataset, getNextBatch, writeValidationResultToFile, getIndexOfOneHot, createNeuralNetwork
 
 arguments = ' '.join(sys.argv[1:])
 
@@ -20,11 +20,13 @@ x = tf.placeholder('float', [None, n_attributes])
 y = tf.placeholder('float')
 
 def train_neural_network(x):
-    prediction = neural_network_model(x, n_classes, n_attributes)
+    prediction = createNeuralNetwork(x, n_classes, n_attributes)
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
     saver = tf.train.Saver() 
+    
     n_epochs = 2
+
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -36,9 +38,7 @@ def train_neural_network(x):
                 epoch_loss += c
 
             print('Epoch', epoch, 'completed out of', n_epochs,'loss:', epoch_loss)
-        #writer = tf.summary.FileWriter("/TrainAi1_graph", sess.graph)
-
-        saver.save(sess, 'Models/Ai1Model')
+        saver.save(sess, 'Ai1Save/Ai1Model.chkpt')
 
         predictedValue = tf.argmax(prediction, 1)
         feed_dict = {x: validation_Inputs, y: validation_Labels}
