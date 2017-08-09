@@ -28,8 +28,8 @@ Step to set up and run the project
 
 5.a To train the algorythms please run (this may be long depending of you hardware/tensorFlow set-up)
 	- Python TrainAi1.py train.arff
-	- Python TrainAi2.py train.arff
+	- Python TrainAi2.py train.arff (NOT IMPLEMENTED)
 
 5.b alternatively to evaluate the algorythms please run this will produce two file containing the result of the prediction of the two Ai's (AI1_output.txt and AI2_output.txt)
 	- Python ExecuteAi1.py valid.arff
-	- Python ExecuteAi2.py valid.arff
+	- Python ExecuteAi2.py valid.arff (NOT IMPLEMENTED)
