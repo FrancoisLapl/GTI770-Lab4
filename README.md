@@ -2,8 +2,8 @@
 
 Pre-requisite
 -A computer with at least 6 Gb of ram
--TensorFlow
--python 3 64 bits (IMPORTANT for big datasets)
+-TensorFlow 1.21
+-python 3.5 64 bits (IMPORTANT for big datasets)
 -numpy
 
 Step to set up and run the project
