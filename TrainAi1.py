@@ -41,14 +41,14 @@ def train_neural_network(x):
         saver.save(sess, 'Ai1Save/Ai1Model.chkpt')
 
         predictedValue = tf.argmax(prediction, 1)
-        feed_dict = {x: validation_Inputs, y: validation_Labels}
+        #feed_dict = {x: validation_Inputs, y: validation_Labels}
 
-        predictionResult = sess.run(predictedValue, feed_dict=feed_dict)
-        writeValidationResultToFile("Ai1_prediction.txt", predictionResult, validation_Labels, True, labelsDict)
+        #predictionResult = sess.run(predictedValue, feed_dict=feed_dict)
+        #writeValidationResultToFile("Ai1_prediction.txt", predictionResult, validation_Labels, True, labelsDict)
 
-        ##correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
-        ##print(correct)
-        ##accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
-        ##print('Accuracy:', accuracy.eval({x:validation_Inputs, y:validation_Labels}))
+        correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
+        #print(correct)
+        accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+        print('Accuracy:', accuracy.eval({x:validation_Inputs, y:validation_Labels}))
 
 train_neural_network(x)
